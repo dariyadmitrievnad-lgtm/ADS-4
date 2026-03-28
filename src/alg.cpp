@@ -1,6 +1,6 @@
-// Copyright 2021 NNTU-CS
 #include "alg.h"
 
+// O(n^2)
 int countPairs1(int *arr, int len, int value) {
     int count = 0;
 
@@ -15,55 +15,9 @@ int countPairs1(int *arr, int len, int value) {
     return count;
 }
 
+
+// O(n log n) — бинарный поиск
 int countPairs2(int *arr, int len, int value) {
-    int count = 0;
-
-    int left = 0;
-    int right = len - 1;
-
-    while (left < right) {
-        int sum = arr[left] + arr[right];
-
-        if (sum == value) {
-            // если значения разные
-            if (arr[left] != arr[right]) {
-                int leftVal = arr[left];
-                int rightVal = arr[right];
-
-                int leftCount = 0;
-                int rightCount = 0;
-
-                while (left < len && arr[left] == leftVal) {
-                    left++;
-                    leftCount++;
-                }
-
-                while (right >= 0 && arr[right] == rightVal) {
-                    right--;
-                    rightCount++;
-                }
-
-                count += leftCount * rightCount;
-            } 
-            else {
-                int k = right - left + 1;
-                count += k * (k - 1) / 2;
-                break;
-            }
-        } 
-        else if (sum < value) {
-            left++;
-        } 
-        else {
-            right--;
-        }
-    }
-
-    return count;
-}
-
-
-int countPairs3(int *arr, int len, int value) {
     int count = 0;
 
     for (int i = 0; i < len; i++) {
@@ -106,6 +60,51 @@ int countPairs3(int *arr, int len, int value) {
             }
 
             count += (last - first + 1);
+        }
+    }
+
+    return count;
+}
+
+
+// O(n) — два указателя (самый быстрый)
+int countPairs3(int *arr, int len, int value) {
+    int count = 0;
+
+    int left = 0;
+    int right = len - 1;
+
+    while (left < right) {
+        int sum = arr[left] + arr[right];
+
+        if (sum == value) {
+            if (arr[left] != arr[right]) {
+                int leftVal = arr[left];
+                int rightVal = arr[right];
+
+                int leftCount = 0;
+                int rightCount = 0;
+
+                while (left < len && arr[left] == leftVal) {
+                    left++;
+                    leftCount++;
+                }
+
+                while (right >= 0 && arr[right] == rightVal) {
+                    right--;
+                    rightCount++;
+                }
+
+                count += leftCount * rightCount;
+            } else {
+                int k = right - left + 1;
+                count += k * (k - 1) / 2;
+                break;
+            }
+        } else if (sum < value) {
+            left++;
+        } else {
+            right--;
         }
     }
 
