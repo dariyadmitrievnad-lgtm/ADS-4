@@ -2,38 +2,83 @@
 #include "alg.h"
 
 int countPairs1(int *arr, int len, int value) {
-  return 0;
     int count = 0;
+
     for (int i = 0; i < len; i++) {
         for (int j = i + 1; j < len; j++) {
             if (arr[i] + arr[j] == value) {
                 count++;
-                while (j + 1 < len && arr[j] == arr[j + 1]) {
-                    j++;
-                }
             }
         }
-        while (i + 1 < len && arr[i] == arr[i + 1]) {
-            i++;
-        }
     }
+
     return count;
 }
 
 int countPairs2(int *arr, int len, int value) {
-  return 0;
     int count = 0;
+
+    int left = 0;
+    int right = len - 1;
+
+    while (left < right) {
+        int sum = arr[left] + arr[right];
+
+        if (sum == value) {
+            // если значения разные
+            if (arr[left] != arr[right]) {
+                int leftVal = arr[left];
+                int rightVal = arr[right];
+
+                int leftCount = 0;
+                int rightCount = 0;
+
+                while (left < len && arr[left] == leftVal) {
+                    left++;
+                    leftCount++;
+                }
+
+                while (right >= 0 && arr[right] == rightVal) {
+                    right--;
+                    rightCount++;
+                }
+
+                count += leftCount * rightCount;
+            } 
+            else {
+                int k = right - left + 1;
+                count += k * (k - 1) / 2;
+                break;
+            }
+        } 
+        else if (sum < value) {
+            left++;
+        } 
+        else {
+            right--;
+        }
+    }
+
+    return count;
+}
+
+
+int countPairs3(int *arr, int len, int value) {
+    int count = 0;
+
     for (int i = 0; i < len; i++) {
         int target = value - arr[i];
+
         int left = i + 1;
         int right = len - 1;
-        int found = -1;
+        int first = -1;
 
         while (left <= right) {
             int mid = (left + right) / 2;
+
             if (arr[mid] == target) {
-                found = mid;
-                break;
+                first = mid;
+                right = mid - 1;
             } else if (arr[mid] < target) {
                 left = mid + 1;
             } else {
@@ -41,39 +86,28 @@ int countPairs2(int *arr, int len, int value) {
             }
         }
 
-        if (found != -1) {
-            count++;
-            while (i + 1 < len && arr[i] == arr[i + 1]) {
-                i++;
+        if (first != -1) {
+            int last = first;
+
+            left = first;
+            right = len - 1;
+
+            while (left <= right) {
+                int mid = (left + right) / 2;
+
+                if (arr[mid] == target) {
+                    last = mid;
+                    left = mid + 1;
+                } else if (arr[mid] < target) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
             }
+
+            count += (last - first + 1);
         }
     }
-    return count;
-}
 
-int countPairs3(int *arr, int len, int value) {
-  return 0;
-    int count = 0;
-    int left = 0;
-    int right = len - 1;
-
-    while (left < right) {
-        int sum = arr[left] + arr[right];
-        if (sum == value) {
-            count++;
-            int leftVal = arr[left];
-            while (left < right && arr[left] == leftVal) {
-                left++;
-            }
-            int rightVal = arr[right];
-            while (left <= right && arr[right] == rightVal) {
-                right--;
-            }
-        } else if (sum < value) {
-            left++;
-        } else {
-            right--;
-        }
-    }
     return count;
 }
