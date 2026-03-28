@@ -1,6 +1,7 @@
+// Copyright 2021 NNTU-CS
 #include "alg.h"
 
-// O(n^2)
+
 int countPairs1(int *arr, int len, int value) {
     int count = 0;
 
@@ -16,7 +17,7 @@ int countPairs1(int *arr, int len, int value) {
 }
 
 
-// O(n log n) — бинарный поиск
+
 int countPairs2(int *arr, int len, int value) {
     int count = 0;
 
@@ -67,7 +68,7 @@ int countPairs2(int *arr, int len, int value) {
 }
 
 
-// O(n) — два указателя (самый быстрый)
+
 int countPairs3(int *arr, int len, int value) {
     int count = 0;
 
